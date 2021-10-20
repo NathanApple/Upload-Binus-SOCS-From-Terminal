@@ -1,7 +1,7 @@
 # Upload-Binus-SOCS-From-Terminal
 
 ## Instalation
-Put script.py at working directory ( please put at same folder with the filename that will be upload )
+Put script.py at working directory ( please put at same folder with the filename that will be uploaded )
 
 [Download python3] (https://www.python.org/downloads/).
 
@@ -27,5 +27,8 @@ cid must be string
 if cid = ?, it will print all avaible cid to use
 
 ## More Info
-There will be more update to come, please feel free to ask anything with me
 Discord : Hiko#6357
+
+There will be more update to come, 
+Please feel free to ask anything with me
+and help me by creating pull request
