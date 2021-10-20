@@ -1,5 +1,5 @@
 # Upload-Binus-SOCS-From-Terminal
-
+Please star the github project to save the repository
 ## Instalation
 Put script.py at working directory ( please put at same folder with the filename that will be uploaded )
 
@@ -17,6 +17,7 @@ Open in terminal ( or window terminal )
 cd to working directory/folder
 
 python script.py [filename] [cid]
+example : python .\script.py .\f.c
 
 filename must be string with following constraint
 (filename).(extension)
@@ -31,4 +32,4 @@ Discord : Hiko#6357
 
 There will be more update to come, 
 Please feel free to ask anything with me
-and help me by creating pull request
+And feel free to help me by creating pull request
