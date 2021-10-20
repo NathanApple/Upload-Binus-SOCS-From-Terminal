@@ -3,14 +3,14 @@
 ## Instalation
 Put script.py at working directory ( please put at same folder with the filename that will be uploaded )
 
-[Download python3] (https://www.python.org/downloads/).
+[Download python3](https://www.python.org/downloads/).
 
 Make sure following python library already downloaded
 - requests
 - bs4
 - And standard python library 
 
-Recommended, [download window terminal from microsoft store] (https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701)
+Recommended, [download window terminal from microsoft store](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701)
 
 ## Usage
 Open in terminal ( or window terminal )
