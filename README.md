@@ -1,7 +1,7 @@
 # Upload-Binus-SOCS-From-Terminal
 Please star the github project to save the repository
 ## Instalation
-Put script.py at working directory ( please put at same folder with the filename that will be uploaded )
+Download and put script.py at working directory ( please put at same folder with the filename that will be uploaded )
 
 [Download python3](https://www.python.org/downloads/).
 
