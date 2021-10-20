@@ -32,7 +32,7 @@ example : python .\script.py .\f.c
 ./(filename).(extension)
 
 
-<b>cid must be string</b>
+<b>optional, cid must be string</b>
 
 if cid = ?, it will print all avaible cid to use
 
