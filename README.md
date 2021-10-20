@@ -12,26 +12,36 @@ Make sure following python library already downloaded
 
 Recommended, [download window terminal from microsoft store](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701)
 
+
 ## Usage
 Open in terminal ( or window terminal )
+
 cd to working directory/folder
 
 python script.py [filename] [cid]
+
 example : python .\script.py .\f.c
 
 ![Example](https://github.com/NathanApple/Upload-Binus-SOCS-From-Terminal/blob/main/pictures/example1.png?raw=true)
 
 
 filename must be string with following constraint
+
 (filename).(extension)
+
 or
+
 ./(filename).(extension)
 
+
 cid must be string
+
 if cid = ?, it will print all avaible cid to use
+
 
 ## More Info
 Discord : Hiko#6357
 
 There will be more update to come, 
+
 Please feel free to ask anything and creating pull request
