@@ -18,6 +18,7 @@ cd to working directory/folder
 
 python script.py [filename] [cid]
 example : python .\script.py .\f.c
+![Example](https://github.com/NathanApple/Upload-Binus-SOCS-From-Terminal/blob/main/pictures/example1.png?raw=true)
 
 filename must be string with following constraint
 (filename).(extension)
