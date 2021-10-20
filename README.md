@@ -28,7 +28,7 @@ example : python .\script.py .\f.c
 <b>filename must be string with following constraint</b>
 
 (filename).(extension)
-or
+<i>or</i>
 ./(filename).(extension)
 
 
