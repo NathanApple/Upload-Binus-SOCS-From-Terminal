@@ -31,5 +31,4 @@ if cid = ?, it will print all avaible cid to use
 Discord : Hiko#6357
 
 There will be more update to come, 
-Please feel free to ask anything with me
-And feel free to help me by creating pull request
+Please feel free to ask anything and creating pull request
