@@ -25,7 +25,7 @@ example : python .\script.py .\f.c
 ![Example](https://github.com/NathanApple/Upload-Binus-SOCS-From-Terminal/blob/main/pictures/example1.png?raw=true)
 
 
-filename must be string with following constraint
+<b>filename must be string with following constraint</b>
 
 (filename).(extension)
 
@@ -34,7 +34,7 @@ or
 ./(filename).(extension)
 
 
-cid must be string
+<b>cid must be string</b>
 
 if cid = ?, it will print all avaible cid to use
 
