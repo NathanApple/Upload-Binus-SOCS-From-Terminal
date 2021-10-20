@@ -2,7 +2,7 @@
 
 
 ## Usage
-python script.py '[filename]' [cid]
+python script.py [filename] [cid]
 
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
