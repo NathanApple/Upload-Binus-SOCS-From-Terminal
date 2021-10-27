@@ -1,10 +1,13 @@
 # Became a sigma by doing everything at terminal
 # Please star project on github to get notified on new update
 # https://github.com/NathanApple/Upload-Binus-SOCS-From-Terminal
+# Usage : python script.py [filename] [cid]
+
 # Default file extension for Cpp : Cpp11 and py : Python3
 # Config file : config.ini
+
 # Please customize the code as your heart content.
-# TODO : Global config path
+# TODO : Global config path [ Priority ]
 # TODO : Access program from anywhere ( using bin as env variable )
 #       sys.argv will need to be changed when that happen
 # TODO : Simplify repetitive code. I have no idea how the program should flow
@@ -15,24 +18,36 @@ import sys
 from bs4 import BeautifulSoup
 from configparser import ConfigParser
 from os import path
+from time import sleep
 import getpass
+# import itertools
+# import threading
 
 language = {}
 phpsessid = ""
 domjudge_cid = ""
-CONSTANT_CONFIG_PATH = "config.ini"
+CONSTANT_CONFIG_PATH = "socs_config.ini"
+done = False
+folderPath = ""
 
 def main():
     get_config()
+    # check_file_path()
+    # exit()
+    
+    # wait_result()
+    # exit()
     # print(language, phpsessid, domjudge_cid)
     lenArgv = len(sys.argv)
     # print(lenArgv)
     if lenArgv == 1:
         pass
     elif lenArgv == 2:
-        _,filename = sys.argv
-        if (filename == "?"):
+        _,filepath = sys.argv
+        if (filepath == "?"):
+            # TODO next
             pass
+        folderPath, filename = check_file_path(filepath)
         prob, lang = get_problem_and_language(filename)
         cookies={"domjudge_cid": domjudge_cid,"PHPSESSID": phpsessid}
 
@@ -41,17 +56,19 @@ def main():
         # sendRequest()
         probId = find_id_by_problem(probList, prob)
 
-        print(send_file_to_server(filename, lang, probId, domjudge_cid))
+        print(send_file_to_server((folderPath+"\\"+filename), lang, probId, domjudge_cid))
         # Too Lazy to do some verification. :)
-        print("Success")
+        # print("Success")
+        wait_result()
         
     elif lenArgv == 3:
         # Argument : [filename] [cid]
         # cid could have reset as argument which will show all avaible cid
-        _,filename,cid = sys.argv
+        _,filepath,cid = sys.argv
         if (cid == "reset" or cid == "idk" or cid == "?"):
             cid = input_cid()
         
+        folderPath, filename = check_file_path(filepath)
         prob, lang = get_problem_and_language(filename)
         cookies={"domjudge_cid": cid,"PHPSESSID": phpsessid}
 
@@ -60,9 +77,12 @@ def main():
         # sendRequest()
         probId = find_id_by_problem(probList, prob)
 
-        print(send_file_to_server(filename, lang, probId, cid))
+        print(send_file_to_server((folderPath+"\\"+filename), lang, probId, domjudge_cid))
+
         # Too Lazy to do some verification. :)
-        print("Success")
+        # print("Success")
+        wait_result()
+        
 
 class bcolors:
     HEADER = '\033[95m'
@@ -75,20 +95,37 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+# def animate():
+#     for c in itertools.cycle(['|', '/', '-', '\\']):
+#         if done:
+#             break
+#         sys.stdout.write('\rloading ' + c)
+#         sys.stdout.flush()
+#         sleep(0.1)
+#     sys.stdout.write('\rDone!     ')
 
 def get_config():
-    global language, phpsessid, domjudge_cid
+    global language, phpsessid, domjudge_cid, folderPath
     if not path.isfile(CONSTANT_CONFIG_PATH):
         create_config()
     
     config = ConfigParser()
     # config.sections()
     config.read(CONSTANT_CONFIG_PATH)
-    language = {x[0]:x[1] for x in config.items('LANGUAGE')}
-    phpsessid = config['CREDENTIAL']['PHPSESSID']
-    domjudge_cid = config['CREDENTIAL']['domjudge_cid']
+    try:
+        language = {x[0]:x[1] for x in config.items('LANGUAGE')}
+        phpsessid = config['CREDENTIAL']['PHPSESSID']
+        domjudge_cid = config['CREDENTIAL']['domjudge_cid']
+        folderPath = config['PATH']['FOLDER_PATH']
+    except:
+        print("Config is incomplete.")
+        # print("Config Path is incomplete. Please try again")
+        create_config()
+        print("Config completed, please try again")
+        exit()
+        
 
-def update_config(language={}, cid="", phpsessid=""):
+def update_config(language={}, cid="", phpsessid="",folderPath=""):
     """Update Config
 
     Args:
@@ -107,6 +144,9 @@ def update_config(language={}, cid="", phpsessid=""):
     if phpsessid:
         config['CREDENTIAL']['PHPSESSID'] = phpsessid
 
+    if folderPath:
+        config['PATH']['FOLDER_PATH'] = folderPath
+        
     with open(CONSTANT_CONFIG_PATH, 'w') as configfile:
         config.write(configfile)
 
@@ -130,6 +170,9 @@ def create_config():
     config['CREDENTIAL'] = {}
     config['CREDENTIAL']['PHPSESSID'] = login()
     config['CREDENTIAL']['domjudge_cid'] = ''
+    
+    config['PATH'] = {}
+    config['PATH']['FOLDER_PATH'] = path.dirname(path.realpath(__file__))
     with open(CONSTANT_CONFIG_PATH, 'w') as configfile:
         config.write(configfile)
 
@@ -158,6 +201,9 @@ def find_id_by_problem(probDict, problem):
         print(f"{bcolors.FAIL} Please use correct CID  {bcolors.ENDC}")
         print(f"{bcolors.FAIL} Use '{bcolors.WARNING}python script.py filename ?{bcolors.FAIL}' to reset CID {bcolors.ENDC}")
         print(f"{bcolors.FAIL} Program Aborted {bcolors.ENDC}")
+        print(f"{bcolors.FAIL} DEBUG {bcolors.ENDC}")
+        print(probDict)
+        print(problem)
         exit()
     return id
 
@@ -194,11 +240,11 @@ def get_problem_and_language(text):
     newLang = language[lang]
     return prob,newLang
     
-def send_file_to_server(filename, language, probId, domjudge_cid):
-    print(filename, language, probId, domjudge_cid)
+def send_file_to_server(filepath, language, probId, domjudge_cid):
+    print(filepath, language, probId, domjudge_cid)
     url = "https://socs1.binus.ac.id/quiz/team/upload.php"
     cookies={"domjudge_cid": domjudge_cid,"PHPSESSID": phpsessid}
-    files = {'code[]': open(filename,'rb')}
+    files = {'code[]': open(filepath,'rb')}
     values = {'probid': probId, 
             'langid': language, 
             'submit': 'submit'}
@@ -221,9 +267,9 @@ def login():
     Returns:
         string: phpsessid
     """
-    print(f"{bcolors.HEADER} Login Needed! {bcolors.OKBLUE} {bcolors.ENDC}")
+    print(f"{bcolors.HEADER} Login Needed! {bcolors.ENDC}")
     print(f"{bcolors.FAIL} Note : Username and Password will not be saved {bcolors.ENDC}")
-    print(f"{bcolors.FAIL} But Session ID from Login will be save in plain text {bcolors.ENDC}")
+    print(f"{bcolors.FAIL} But Session Cookies from Login will be save in plain text {bcolors.ENDC}")
     while True:
         print(f"{bcolors.WARNING} ( Ctrl + C ) to exit the program {bcolors.ENDC}")
         
@@ -252,6 +298,74 @@ def login():
             print(f"{bcolors.FAIL} Login Failed {bcolors.ENDC}")
             print(f"{bcolors.FAIL} Error Info : {title} {bcolors.ENDC}")
                 
-                
+def check_recent_result():
+    """Check Answer
+    This Program will access phpsessid and cid to work
+    """
+    url = "https://socs1.binus.ac.id/quiz/team/upload.php"
+    cookies={"domjudge_cid": domjudge_cid,"PHPSESSID": phpsessid}
+    response = requests.post(url, cookies=cookies)
+    soup = BeautifulSoup(response.text, "html.parser") 
+    row = soup.find("tr", {"class": "rowodd"})
+    time = row.find("a").text
+    probId = row.find("td", {"class": "probid"}).find("a").text
+    langId = row.find("td", {"class": "langid"}).find("a").text
+    # result may be have 1 result if currently is pending
+    resultBox = row.find("td", {"class": "result"}).find("a").text
+    if (resultBox == "pending"):
+        result = resultBox
+        point = 0
+    else:
+        result, point = resultBox.split(" ")
+    # result, point = resultBox.text.split(" ")
+    return time, probId, langId, result, point
+    
+def wait_result():
+    dot = 0
+    # print("Pending")
+    print("")
+    while True:
+        time, probId, langId, result, point = check_recent_result()
+        # I could create threading but not worth my time here
+        dot = (dot+1) if dot < 5 else 1
+        print("\033[A                                                                         \033[A")
+        # print(point)
+        if (result == "pending"):
+            print(f"{bcolors.OKCYAN}{time}{bcolors.WARNING} | {probId} {langId} | {bcolors.ENDC}{result}",
+                  ("."*dot))
+        elif (result == "correct"):
+            print(f"{bcolors.OKCYAN}{time}{bcolors.WARNING} | {probId} {langId} | ",
+                  f"{bcolors.OKGREEN}{result} {point}{bcolors.ENDC}")
+            break
+        else:
+            print(f"{bcolors.OKCYAN}{time}{bcolors.WARNING} | {probId} {langId} | ",
+                  f"{bcolors.FAIL}{result} {point}{bcolors.ENDC}")
+            break
+        # print(point)
+        # print(")
+        sleep(0.5)
+
+def check_file_path(filePath):
+    """Check File Path
+
+    Args:
+        filePath (string): File Name or Path
+        global folderPath may be needed to be accessed
+
+    Returns:
+        string: folderpath
+        string: filePath
+    """
+    global folderPath
+    if (":" in filePath):
+        folderPath, filePath = filePath.rsplit('\\', 1)
+        # print(folderPath)
+        # print(path.dirname(path.realpath(__file__)))
+        update_config(folderPath=folderPath)
+        return folderPath, filePath
+    else:
+        return folderPath, filePath
+    
+    
 if __name__ == "__main__":
     main()
