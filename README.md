@@ -16,21 +16,35 @@ Recommended, [download window terminal from microsoft store](https://www.microso
 ## Usage
 Open in terminal ( or window terminal )
 
-cd to working directory/folder
+Put file in any folder
 
-python script.py [filename] [cid]
+Open window terminal / any terminal, 
 
-example : python .\script.py .\f.c
+cd to path
+
+python script.py [filepath] [cid]
+
+example : 
+- python script.py C:\SOCS\Task\a.c
+- python script.py C:\SOCS\Task\a.c 1
+- python script.py C:\SOCS\Task\a.c ?
+- python script.py a.c
+
+
 
 ![Example](https://github.com/NathanApple/Upload-Binus-SOCS-From-Terminal/blob/main/pictures/example1.png?raw=true)
 
 
-<b>filename must be string with following constraint</b>
+<b>Filepath must be string with following constraint</b>
 
+(path)\(filename).(extension)
+<i>or</i>
 (filename).(extension)
 <i>or</i>
 ./(filename).(extension)
 
+Path must be string with following constraint
+(Parent Drive):\(Folder Path)\(Folder Path)
 
 <b>optional, cid must be string</b>
 
@@ -43,3 +57,10 @@ Discord : Hiko#6357
 There will be more update to come, 
 
 Please feel free to ask anything and creating pull request
+
+## Changelog
+Update 1.1 
+- Now you could upload file in any folder without change current python script folder
+- Recent uploaded file path will be saved so when another file needed to be upload, just use the filename without the full path
+- Now will get the result live from socs
+Update 1.0 First Release
