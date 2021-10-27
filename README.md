@@ -16,7 +16,7 @@ Recommended, [download window terminal from microsoft store](https://www.microso
 ## Usage
 Open in terminal ( or window terminal )
 
-Put file in any folder
+Put file in any folder ( Note : You are allowed to change the python filename since it doesnt affect anything at all )
 
 Open window terminal / any terminal, 
 
