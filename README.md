@@ -59,8 +59,9 @@ There will be more update to come,
 Please feel free to ask anything and creating pull request
 
 ## Changelog
-Upcoming 1.2
-- Fix bug when using ? as cid did not update current cid 
+Update 1.2
+- Fix bug when using ? as cid did not update current cid
+- Added warning when accessing empty problem cid 
 Update 1.1 
 - Now you could upload file in any folder without change current python script folder
 - Recent uploaded file path will be saved so when another file needed to be upload, just use the filename without the full path
