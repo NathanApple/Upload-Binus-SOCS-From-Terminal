@@ -32,6 +32,8 @@ folderPath = ""
 
 def main():
     get_config()
+    global domjudge_cid
+    
     # check_file_path()
     # exit()
     
@@ -71,16 +73,16 @@ def main():
         folderPath, filename = check_file_path(filepath)
         prob, lang = get_problem_and_language(filename)
         cookies={"domjudge_cid": cid,"PHPSESSID": phpsessid}
-
         res = requests.get("https://socs1.binus.ac.id/quiz/team/index.php", cookies=cookies)
         probList = get_problem_list(res.text)
         # sendRequest()
         probId = find_id_by_problem(probList, prob)
 
-        print(send_file_to_server((folderPath+"\\"+filename), lang, probId, domjudge_cid))
+        print(send_file_to_server((folderPath+"\\"+filename), lang, probId, cid))
 
         # Too Lazy to do some verification. :)
         # print("Success")
+        domjudge_cid = cid
         wait_result()
         
 
@@ -94,15 +96,6 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-
-# def animate():
-#     for c in itertools.cycle(['|', '/', '-', '\\']):
-#         if done:
-#             break
-#         sys.stdout.write('\rloading ' + c)
-#         sys.stdout.flush()
-#         sleep(0.1)
-#     sys.stdout.write('\rDone!     ')
 
 def get_config():
     global language, phpsessid, domjudge_cid, folderPath
@@ -212,7 +205,14 @@ def get_problem_list(html):
     # probId = soup.find("select", {"id": "probid"})
     title = soup.title.text;
     check_login(title)
-    probDict = {x.text.lower():x.get("value") for x in soup.find("select", {"id": "probid"}).findChildren()}
+    try:
+        probDict = {x.text.lower():x.get("value") for x in soup.find("select", {"id": "probid"}).findChildren()}
+    except AttributeError:
+        print(f"{bcolors.FAIL} There is no problem available{bcolors.ENDC}")
+        print(f"{bcolors.FAIL} Use '{bcolors.WARNING}python script.py filename ?{bcolors.FAIL}' to reset CID {bcolors.ENDC}")
+        print(f"{bcolors.FAIL} Program Aborted {bcolors.ENDC}")
+        exit()
+    
     return probDict
 
 def get_cid(html):
@@ -312,7 +312,7 @@ def check_recent_result():
     langId = row.find("td", {"class": "langid"}).find("a").text
     # result may be have 1 result if currently is pending
     resultBox = row.find("td", {"class": "result"}).find("a").text
-    if (resultBox == "pending"):
+    if (resultBox == "pending" or resultBox == "too-late"):
         result = resultBox
         point = 0
     else:
