@@ -60,7 +60,7 @@ Please feel free to ask anything and creating pull request
 
 ## Changelog
 ### Update 1.2
-- Fix bug when using ? as cid did not update current cid
+- Fixed a bug when using ? as cid did not update current cid
 - Added warning when accessing empty problem cid 
 
 ### Update 1.1 
